@@ -1,6 +1,6 @@
 Package: scribe
 Title: Command Argument Parsing
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person(
       given   = "Jordan Mark",
@@ -23,8 +23,8 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://jmbarbone.github.io/scribe/
 NeedsCompilation: no
-Packaged: 2023-03-08 02:21:04 UTC; jordan
+Packaged: 2023-05-22 13:45:47 UTC; jordan
 Author: Jordan Mark Barbone [aut, cph, cre]
     (<https://orcid.org/0000-0001-9788-3628>)
 Repository: CRAN
-Date/Publication: 2023-03-13 13:20:02 UTC
+Date/Publication: 2023-05-22 15:20:02 UTC

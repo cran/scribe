@@ -3,8 +3,8 @@
 #'
 #' Make a new [scribeArg] object
 #'
-#' @param aliases,action,convert,options,default,info,n See `$initialize()`
-#'   in [scribeArg].
+#' @param aliases,action,convert,options,default,info,n,stop,execute See
+#'   `$initialize()` in [scribeArg].
 #' @examples
 #' new_arg()
 #' new_arg("values", action = "dots")
@@ -19,7 +19,9 @@ new_arg <- function(
     convert = default_convert,
     n       = NA_integer_,
     info    = NULL,
-    options = list()
+    options = list(),
+    stop    = c("none", "hard", "soft"),
+    execute = invisible
 ) {
   scribeArg$new(
     aliases = aliases,
@@ -28,7 +30,9 @@ new_arg <- function(
     convert = convert,
     n       = n,
     info    = info,
-    options = options
+    options = options,
+    stop    = stop,
+    execute = execute
   )
 }
 
@@ -39,7 +43,20 @@ scribe_help_arg <- function() {
     default = FALSE,
     n = 0,
     info = "prints this and quietly exits",
-    options = list(no = FALSE)
+    options = list(no = FALSE),
+    stop = "hard",
+    execute = function(self, ca) {
+      if (isTRUE(self$get_value())) {
+        ca$help()
+        return(exit())
+      }
+
+      if (isFALSE(self$get_value())) {
+        # remove 'help'
+        values <- ca$get_values()
+        ca$field("values", values[-match("help", names(values))])
+      }
+    }
   )
 }
 
@@ -50,7 +67,20 @@ scribe_version_arg <- function() {
     default = FALSE,
     n = 0,
     info = "prints the version of {scribe} and quietly exits",
-    options = list(no = FALSE)
+    options = list(no = FALSE),
+    stop = "hard",
+    execute = function(self, ca) {
+      if (isTRUE(self$get_value())) {
+        ca$version()
+        return(exit())
+      }
+
+      if (isFALSE(self$get_value())) {
+        # remove 'version'
+        values <- ca$get_values()
+        ca$field("values", values[-match("version", names(values))])
+      }
+    }
   )
 }
 
@@ -64,13 +94,19 @@ arg_initialize <- function( # nolint: cyclocomp_linter.
   convert = default_convert,
   n       = NA_integer_,
   info    = NA_character_,
-  options = list()
+  options = list(),
+  stop    = c("none", "hard", "soft"),
+  execute = invisible
 ) {
   action  <- match.arg(action, arg_actions())
   info    <- info    %||% NA_character_
   options <- options %||% list()
 
   if (action == "default") {
+    if (is_arg(default)) {
+      action <- default$get_action()
+    }
+
     # consider other sorts of improvements
     if ("no" %in% names(options) || isTRUE(n == 0L)) {
       action <- "flag"
@@ -89,12 +125,21 @@ arg_initialize <- function( # nolint: cyclocomp_linter.
     action,
     flag = {
       convert <- NULL
-      options$no <- options$no %||% TRUE
+      options$no <- options$no %||% getOption("scribe.flag.no")
 
-      if (!(isFALSE(default) | is.null(default))) {
-        warning("flag must be NULL or TRUE when action=\"flag\"", call. = FALSE)
+      if (!is_arg(default)) {
+        if (is.null(default)) {
+          default <- FALSE
+        }
+
+        if (!(is.logical(default) && length(default) == 1 && !is.na(default))) {
+          warning(
+            "flag must be NULL, TRUE, or FALSE when action=\"flag\"",
+            call. = FALSE
+          )
+          default <- FALSE
+        }
       }
-      default <- FALSE
 
       if (is.na(n)) {
         n <- 0L
@@ -105,6 +150,7 @@ arg_initialize <- function( # nolint: cyclocomp_linter.
       }
     },
     list = {
+      # don' assume default choices
       options$choices <- options$choices %||% list()
 
       if (is.na(n)) {
@@ -167,6 +213,18 @@ arg_initialize <- function( # nolint: cyclocomp_linter.
     }
   }
 
+
+  if (is.logical(stop) && length(stop) == 1L) {
+    stop <- if (is.na(stop)) {
+      "soft"
+    } else if (stop) {
+      "hard"
+    } else {
+      "none"
+    }
+  }
+
+  stop <- match.arg(stop)
   action <- match.arg(action, arg_actions())
 
   self$field("aliases", aliases)
@@ -177,6 +235,10 @@ arg_initialize <- function( # nolint: cyclocomp_linter.
   self$field("n", as.integer(n))
   self$field("positional", as.logical(positional))
   self$field("default", default)
+  self$field("resolved", FALSE)
+  self$field("value", NULL)
+  self$field("stop", stop)
+  self$field("execute", execute)
   invisible(self)
 }
 
@@ -239,6 +301,7 @@ arg_get_help <- function(self) {
     }
   )
 
+  right <- paste0(right, collapse = "")
   out <- trimws(c(left, right))
   out[is.na(out)] <- ""
   out
@@ -280,12 +343,49 @@ arg_get_action  <- function(self) {
 }
 
 arg_get_default <- function(self) {
-  self$default
+  if (is_arg(self$default)) {
+    self$default$get_value()
+  } else {
+    self$default
+  }
+}
+
+arg_get_value <- function(self) {
+  if (!self$is_resolved()) {
+    warning("scribeArg object has not been resolved", call. = FALSE)
+  }
+
+  self$value
+}
+
+arg_is_resolved <- function(self) {
+  isTRUE(self$resolved)
 }
 
 # internal ----------------------------------------------------------------
 
 arg_parse_value <- function(self, ca) {
+  default <-
+    if (is_arg(self$default)) {
+      self$default$get_value()
+    } else {
+      self$default
+    }
+
+  if (ca$stop == "soft") {
+    value <- default
+    self$field("value", value)
+    self$field("resolved", TRUE)
+    return(value)
+  }
+
+  if (ca$stop == "hard") {
+    value <- scribe_empty_value()
+    self$field("value", value)
+    self$field("resolved", TRUE)
+    return(value)
+  }
+
   # find alias in working
   alias <- self$get_aliases()
 
@@ -307,43 +407,53 @@ arg_parse_value <- function(self, ca) {
   }
 
   if (length(m) == 0L) {
-    return(self$get_default())
-  }
-
-  if (length(m) > 1L) {
-    warning(
-      sprintf(
-        "w Multiple command arguments matched for [%s]",
-        to_string(alias)
-      ),
-      call = FALSE
-    )
-  }
-
-  switch(
-    self$action,
-    dots = {
-      value <- ca_get_working(ca)
-      ca_remove_working(ca, seq_along(value))
-
-      if (!length(value)) {
-        value <- self$get_default()
-      }
-    },
-    list = {
-      m <- m + seq.int(0L, self$n)
-      value <- ca_get_working(ca)[m[-off]]
-      ca_remove_working(ca, m)
-    },
-    flag = {
-      value <- !grepl("^--?no-", ca_get_working(ca)[m + off])
-      ca_remove_working(ca, m)
+    value <- self$get_default()
+  } else {
+    if (length(m) > 1L) {
+      warning(
+        sprintf(
+          "w Multiple command arguments matched for [%s]",
+          to_string(alias)
+        ),
+        call = FALSE
+      )
     }
-  )
 
-  value <- value_convert(value, to = self$default %||% self$convert)
+    switch(
+      self$action,
+      dots = {
+        value <- ca_get_working(ca)
+        ca_remove_working(ca, seq_along(value))
+
+        if (!length(value)) {
+          value <- self$get_default()
+        }
+      },
+      list = {
+        m <- m + seq.int(0L, self$n)
+        value <- ca_get_working(ca)[m[-off]]
+
+        if (self$positional && is.na(value)) {
+          value <- self$get_default()
+        } else {
+          ca_remove_working(ca, m)
+        }
+      },
+      flag = {
+        value <- !grepl("^--?no-", ca_get_working(ca)[m + off])
+        ca_remove_working(ca, m)
+      }
+    )
+
+    value <- value_convert(value, to = default %||% self$convert)
+    ca$field("stop", structure(self$stop, arg = self))
+  }
+
+  self$field("value", value)
+  self$field("resolved", TRUE)
   value
 }
+
 
 # helpers -----------------------------------------------------------------
 
@@ -355,4 +465,8 @@ ARG_PAT <- "^-[a-z]$|^--[a-z]+$|^--[a-z](+[-]?[a-z]+)+$"  # nolint: object_name_
 
 arg_actions <- function() {
   c("default", "list", "flag", "dots")
+}
+
+scribe_empty_value <- function() {
+  structure(list(), class = c("scribe_empty_value"))
 }

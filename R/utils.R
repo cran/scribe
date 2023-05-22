@@ -11,7 +11,9 @@ replace2 <- function(x, i, value) {
 }
 
 is_empty <- function(x) {
-  if (is.function(x)) {
+  if (is_arg(x)) {
+    FALSE
+  } else if (is.function(x)) {
     FALSE
   } else {
     is.null(x) || length(x) == 0L || !any(nzchar(x))
@@ -40,11 +42,8 @@ is_intish <- function(x) {
   !is.null(x) && (is.numeric(x) | all(is.na(x))) && !isFALSE(x %% 1 == 0)
 }
 
-exit <- function(
-    # allow for manual checking
-  force = !getOption("scribe.interactive", interactive())
-) {
-
+# allow for manual checking
+exit <- function(force = !getOption("scribe.interactive", interactive())) {
   # nocov start
   if (force) {
     # testing in tests/testthat/scripts/help.R

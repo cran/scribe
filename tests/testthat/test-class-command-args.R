@@ -107,7 +107,6 @@ test_that("$add_argument(action = 'flag') [#17]", {
   expect_identical(obj, exp)
 
   # nolint start: line_length_linter.
-  expect_warning(command_args()$add_argument("f", action = "flag", default = TRUE))
   expect_warning(command_args()$add_argument("f", action = "flag", default = "1"))
   expect_warning(command_args()$add_argument("f", action = "flag", default = "1"))
   # nolint end: line_length_linter.
@@ -165,7 +164,10 @@ test_that("$add_argument(arg) [#45]", {
 })
 
 test_that("args are returned in original order [#25]", {
-  ca <- command_args(c("-b", "one", "-c", "two", "-a", "three", "foo", "bar"))
+  ca <- command_args(
+    c("-b", "one", "-c", "two", "-a", "three", "foo", "bar"),
+
+  )
   ca$add_argument("...")
   ca$add_argument("-a", default = "zero")
   ca$add_argument("-c", default = "zero")
@@ -258,7 +260,7 @@ test_that("--help has early stop", {
   ca <- command_args("--help")
   ca$add_argument("-v")
   ca$add_argument("-f")
-  exp <- list(help = TRUE, version = FALSE, v = NULL, f = NULL)
+  exp <- list(help = TRUE)
   expect_output(obj <- try(ca$parse()))
   expect_identical(obj, exp)
 })
@@ -328,16 +330,69 @@ test_that("examples snaps", {
 })
 
 test_that("versions", {
-  ca <- command_args(string = "--version")
+  ca <- command_args(string = "--version", include = "version")
   ca$add_argument("--foo")
   ca$add_argument("--bar")
   ca$add_description("This does things")
   expect_output((obj <- ca$parse()))
-  exp <- list(version = TRUE, foo = NULL, bar = NULL)
+  exp <- list(version = TRUE)
   expect_identical(obj, exp)
   expect_output(ca$version())
 })
 
+test_that("positional defaults [#52]", {
+  ca <- command_args()
+  ca$add_argument("pos", default = 1)
+  obj <- ca$parse()
+  exp <- list(pos = 1)
+  expect_identical(obj, exp)
+})
+
+test_that("pass arg as default [#54]", {
+  ca <- command_args()
+  arg <- new_arg("-a", action = "flag")
+  ca$add_argument(arg)
+  ca$add_argument("-b", default = arg)
+
+  obj <- ca$parse()
+  exp <- list(a = FALSE, b = FALSE)
+  expect_identical(obj, exp)
+
+  ca$set_input("-a")
+  obj <- ca$parse()
+  exp <- list(a = TRUE, b = TRUE)
+  expect_identical(obj, exp)
+
+  ca$set_input("-b")
+  obj <- ca$parse()
+  exp <- list(a = FALSE, b = TRUE)
+  expect_identical(obj, exp)
+
+  ca$set_input(c("-a", "-b"))
+  obj <- ca$parse()
+  exp <- list(a = TRUE, b = TRUE)
+  expect_identical(obj, exp)
+})
+
+test_that("'stop' args [#60]", {
+  ca <- command_args(string = "-a -b")
+  ca$add_argument("-a", action = "flag", stop = "hard")
+  ca$add_argument("-b", action = "flag")
+  obj <- ca$parse()
+  exp <- list(a = TRUE)
+  expect_identical(obj, exp)
+
+  ca <- command_args(string = "-a -b")
+  ca$add_argument("-a", action = "flag", stop = "soft")
+  ca$add_argument("-b", action = "flag")
+  obj <- ca$parse()
+  exp <- list(a = TRUE, b = FALSE)
+  expect_identical(obj, exp)
+
+  expect_identical(new_arg(stop = NA)$stop, "soft")
+  expect_identical(new_arg(stop = TRUE)$stop, "hard")
+  expect_identical(new_arg(stop = FALSE)$stop, "none")
+})
 
 test_that("snapshots", {
   ca <- command_args(string = "foo bar --fizz")

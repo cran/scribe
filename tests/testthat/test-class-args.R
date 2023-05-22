@@ -14,7 +14,7 @@ test_that("errors", {
   expect_error(new_arg(action = "flag", n = 1))
   expect_error(new_arg(c("foo", "--bar")))
 
-  ca <- command_args(string = "-a 2 -a 1", include = NA)
+  ca <- command_args(string = "-a 2 -a 1")
   ca$add_argument("-a")
   expect_warning(expect_warning(ca$parse()))
 })
@@ -90,6 +90,40 @@ test_that("new_arg(action = 'default')", {
   expect_identical(new_arg(options = list(choices = 1:2))$action, "list")
   expect_identical(new_arg(n = 0)$action, "flag")
   expect_identical(new_arg(options = list(no = FALSE))$action, "flag")
+})
+
+test_that("action = 'flag' allows TRUE [#55]", {
+  ca <- command_args()
+  expect_warning(
+    ca$add_argument("--foo", action = "flag", default = TRUE),
+    NA
+  )
+  obj <- ca$parse()
+  exp <- list(foo = TRUE)
+  expect_identical(obj, exp)
+
+  ca$set_input("--foo")
+  obj <- ca$parse()
+  exp <- list(foo = TRUE)
+  expect_identical(obj, exp)
+
+  ca$set_input("--no-foo")
+  obj <- ca$parse()
+  exp <- list(foo = FALSE)
+  expect_identical(obj, exp)
+})
+
+test_that("pass arg as default [#54]", {
+  arg <- new_arg("-a")
+  new <- new_arg("-b", default = arg)
+  expect_output(expect_warning(print(new), "has not been resolved"))
+})
+
+test_that("length(info) > 1 [#57]", {
+  ca <- command_args("--help", include = c("help", "version"))
+  ca$add_argument("bad", info = c("one", "two"))
+  expect_length(ca$get_args()[[3]]$get_help(), 2)
+  expect_output(ca$parse())
 })
 
 test_that("snapshots", {

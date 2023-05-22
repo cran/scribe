@@ -11,12 +11,14 @@ new_arg(
   convert = default_convert,
   n = NA_integer_,
   info = NULL,
-  options = list()
+  options = list(),
+  stop = c("none", "hard", "soft"),
+  execute = invisible
 )
 }
 \arguments{
-\item{aliases, action, convert, options, default, info, n}{See \verb{$initialize()}
-in \link{scribeArg}.}
+\item{aliases, action, convert, options, default, info, n, stop, execute}{See
+\verb{$initialize()} in \link{scribeArg}.}
 }
 \value{
 A \link{scribeArg} object
