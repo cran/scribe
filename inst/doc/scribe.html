@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scribe)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(scribe)</span></code></pre></div>
 <p>The <code>{scribe}</code> package provides a means of defining
 command line argument inputs for use with the <a href="https://search.r-project.org/R/refmans/utils/html/Rscript.html">Rscript</a>
 utility. Users will primarily use the <code>command_args()</code>
@@ -354,43 +354,43 @@ is to wrap a simple function to generate a sequence of integers or
 letters. Here we build out a <code>scribeCommandArgs</code> object, add
 a couple of arguments with the <code>$add_argument()</code> method, then
 parse into a named list with <code>$parse()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="fu">c</span>(<span class="st">&quot;-n&quot;</span>, <span class="st">&quot;5&quot;</span>, <span class="st">&quot;--method&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;-n&quot;</span>, <span class="at">default =</span> 1L)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;--method&quot;</span>, <span class="at">default =</span> <span class="st">&quot;letters&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(args<span class="sc">$</span>n)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(args<span class="sc">$</span>method, <span class="fu">c</span>(<span class="st">&quot;letters&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;letters&quot;</span>) {</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> letters[out]</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>out</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3 4 5</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="fu">c</span>(<span class="st">&quot;-n&quot;</span>, <span class="st">&quot;5&quot;</span>, <span class="st">&quot;--method&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;-n&quot;</span>, <span class="at">default =</span> <span class="dv">1</span><span class="dt">L</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;--method&quot;</span>, <span class="at">default =</span> <span class="st">&quot;letters&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(args<span class="sc">$</span>n)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(args<span class="sc">$</span>method, <span class="fu">c</span>(<span class="st">&quot;letters&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;letters&quot;</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  out <span class="ot">&lt;-</span> letters[out]</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>}</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>out</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3 4 5</span></span></code></pre></div>
 <p>In the example above we specify what the command line arguments are
 within <code>command_args()</code>. The intended utility of this is to
 capture these arguments when passe within an <code>Rscript</code> file.
 Below is the same structure, but as we would expect from within a script
 intended to be called from a command line. <code>command_args()</code>
 will grab whatever command line arguments are passed to the script.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env Rscript</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># filename: seq_len.R</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scribe)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;-n&quot;</span>, <span class="at">default =</span> 1L)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;--method&quot;</span>, <span class="at">default =</span> <span class="st">&quot;letters&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(args<span class="sc">$</span>n)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(args<span class="sc">$</span>method, <span class="fu">c</span>(<span class="st">&quot;letters&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;letters&quot;</span>) {</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> letters[out]</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>out</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#!/usr/bin/env Rscript</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># filename: seq_len.R</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">library</span>(scribe)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;-n&quot;</span>, <span class="at">default =</span> <span class="dv">1</span><span class="dt">L</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(<span class="st">&quot;--method&quot;</span>, <span class="at">default =</span> <span class="st">&quot;letters&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(args<span class="sc">$</span>n)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(args<span class="sc">$</span>method, <span class="fu">c</span>(<span class="st">&quot;letters&quot;</span>, <span class="st">&quot;numbers&quot;</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;letters&quot;</span>) {</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  out <span class="ot">&lt;-</span> letters[out]</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>}</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>out</span></code></pre></div>
 <pre><code>seq_len.R -n 3 
 #&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
 <pre><code>seq_len.R -n 3 --method numbers
@@ -401,93 +401,93 @@ directly to another function via <code>do.call()</code>.</p>
 something to it. Were I to use this personally, I would probably pass a
 file path and use a read function first, rather than the
 <code>get()</code> function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_summary <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">levels =</span> <span class="dv">7</span>, <span class="at">sig_figs =</span> <span class="dv">3</span>, <span class="at">q_type =</span> <span class="dv">7</span>) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">get</span>(data, <span class="at">mode =</span> <span class="st">&quot;list&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.data.frame</span>(data))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(data, <span class="at">maxsum =</span> levels, <span class="at">digits =</span> sig_figs, <span class="at">quantile.type =</span> q_type)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">correlation =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">get</span>(data, <span class="at">mode =</span> <span class="st">&quot;list&quot;</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.data.frame</span>(data))</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  form <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">DF2formula</span>(data)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">lm</span>(form, data)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(mod, <span class="at">correlation =</span> correlation)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="at">string =</span> <span class="st">&quot;CO2 --levels 3 --sig-figs 2 --q-type 3&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_description</span>(<span class="st">&quot;Summarise a dataset&quot;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;data&quot;</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Name of the dataset to find&quot;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;--levels&quot;</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> 7L,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Maximum number of levels shown for factors&quot;</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;--sig-figs&quot;</span>,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> 3L,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Number of significant figures&quot;</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;--q-type&quot;</span>,</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> 7L,</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Quantile type&quot;</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">do.call</span>(my_summary, args)</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      Plant             Type         Treatment       conc          uptake    </span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Qn1    : 7   Quebec     :42   nonchilled:42   Min.   :  95   Min.   : 7.7  </span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Qn2    : 7   Mississippi:42   chilled   :42   1st Qu.: 175   1st Qu.:17.9  </span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  (Other):70                                    Median : 350   Median :28.1  </span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                Mean   : 435   Mean   :27.2  </span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                3rd Qu.: 675   3rd Qu.:37.1  </span></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                Max.   :1000   Max.   :45.5</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="at">string =</span> <span class="st">&quot;attitude --correlation&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;data&quot;</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Name of the dataset to find&quot;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;--correlation&quot;</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">action =</span> <span class="st">&quot;flag&quot;</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;When set, prints the correlation matrix of estimated parameters&quot;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">do.call</span>(my_model, args)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = form, data = data)</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -10.9418  -4.3555   0.3158   5.5425  11.5990 </span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept) 10.78708   11.58926   0.931 0.361634    </span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; complaints   0.61319    0.16098   3.809 0.000903 ***</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; privileges  -0.07305    0.13572  -0.538 0.595594    </span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; learning     0.32033    0.16852   1.901 0.069925 .  </span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; raises       0.08173    0.22148   0.369 0.715480    </span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; critical     0.03838    0.14700   0.261 0.796334    </span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; advance     -0.21706    0.17821  -1.218 0.235577    </span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 7.068 on 23 degrees of freedom</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.7326, Adjusted R-squared:  0.6628 </span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F-statistic:  10.5 on 6 and 23 DF,  p-value: 1.24e-05</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Correlation of Coefficients:</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            (Intercept) complaints privileges learning raises critical</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; complaints -0.07                                                     </span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; privileges -0.12       -0.37                                         </span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; learning   -0.16       -0.30      -0.14                              </span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; raises     -0.08       -0.52       0.08      -0.21                   </span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; critical   -0.66        0.00      -0.02       0.20    -0.28          </span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; advance     0.02        0.40      -0.18      -0.35    -0.43  -0.13</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>my_summary <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">levels =</span> <span class="dv">7</span>, <span class="at">sig_figs =</span> <span class="dv">3</span>, <span class="at">q_type =</span> <span class="dv">7</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">get</span>(data, <span class="at">mode =</span> <span class="st">&quot;list&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.data.frame</span>(data))</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">summary</span>(data, <span class="at">maxsum =</span> levels, <span class="at">digits =</span> sig_figs, <span class="at">quantile.type =</span> q_type)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>}</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">correlation =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">get</span>(data, <span class="at">mode =</span> <span class="st">&quot;list&quot;</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.data.frame</span>(data))</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  form <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">DF2formula</span>(data)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">lm</span>(form, data)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="fu">summary</span>(mod, <span class="at">correlation =</span> correlation)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="at">string =</span> <span class="st">&quot;CO2 --levels 3 --sig-figs 2 --q-type 3&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_description</span>(<span class="st">&quot;Summarise a dataset&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="st">&quot;data&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Name of the dataset to find&quot;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="st">&quot;--levels&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="at">default =</span> <span class="dv">7</span><span class="dt">L</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Maximum number of levels shown for factors&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  <span class="st">&quot;--sig-figs&quot;</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="at">default =</span> <span class="dv">3</span><span class="dt">L</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Number of significant figures&quot;</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>)</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="st">&quot;--q-type&quot;</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="at">default =</span> <span class="dv">7</span><span class="dt">L</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Quantile type&quot;</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>)</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="fu">do.call</span>(my_summary, args)</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt;      Plant             Type         Treatment       conc          uptake    </span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt;  Qn1    : 7   Quebec     :42   nonchilled:42   Min.   :  95   Min.   : 7.7  </span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt;  Qn2    : 7   Mississippi:42   chilled   :42   1st Qu.: 175   1st Qu.:17.9  </span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt;  (Other):70                                    Median : 350   Median :28.1  </span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt;                                                Mean   : 435   Mean   :27.2  </span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt;                                                3rd Qu.: 675   3rd Qu.:37.1  </span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt;                                                Max.   :1000   Max.   :45.5</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>ca <span class="ot">&lt;-</span> <span class="fu">command_args</span>(<span class="at">string =</span> <span class="st">&quot;attitude --correlation&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="st">&quot;data&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;Name of the dataset to find&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>ca<span class="sc">$</span><span class="fu">add_argument</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="st">&quot;--correlation&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="at">action =</span> <span class="st">&quot;flag&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="at">info =</span> <span class="st">&quot;When set, prints the correlation matrix of estimated parameters&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>args <span class="ot">&lt;-</span> ca<span class="sc">$</span><span class="fu">parse</span>()</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">do.call</span>(my_model, args)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = form, data = data)</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; -10.9418  -4.3555   0.3158   5.5425  11.5990 </span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; (Intercept) 10.78708   11.58926   0.931 0.361634    </span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; complaints   0.61319    0.16098   3.809 0.000903 ***</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; privileges  -0.07305    0.13572  -0.538 0.595594    </span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; learning     0.32033    0.16852   1.901 0.069925 .  </span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; raises       0.08173    0.22148   0.369 0.715480    </span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; critical     0.03838    0.14700   0.261 0.796334    </span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; advance     -0.21706    0.17821  -1.218 0.235577    </span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 7.068 on 23 degrees of freedom</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.7326, Adjusted R-squared:  0.6628 </span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; F-statistic:  10.5 on 6 and 23 DF,  p-value: 1.24e-05</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt; Correlation of Coefficients:</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt;            (Intercept) complaints privileges learning raises critical</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt; complaints -0.07                                                     </span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; privileges -0.12       -0.37                                         </span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; learning   -0.16       -0.30      -0.14                              </span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; raises     -0.08       -0.52       0.08      -0.21                   </span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="co">#&gt; critical   -0.66        0.00      -0.02       0.20    -0.28          </span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="co">#&gt; advance     0.02        0.40      -0.18      -0.35    -0.43  -0.13</span></span></code></pre></div>
 
 
 
